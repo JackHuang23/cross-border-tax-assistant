@@ -1,0 +1,15 @@
+.git
+venv/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+tests/
+.github/
+.gitignore
+.dockerignore
+README.md
+LICENSE
+LICENSE.EXCEPTION
+THIRD-PARTY-NOTICES.md
+render.yaml

@@ -1,0 +1,25 @@
+FLOSS Compatibility Exception
+==============================
+
+Additional permission granted under Section 7 of the GNU Affero General Public
+License, version 3 ("AGPL-3.0").
+
+As a special exception, the copyright holders of this Program grant you permission
+to combine this Program with a separate work that is distributed under any of the
+following licenses, and to distribute the resulting combined work under that same
+license, where doing so is necessary to resolve the incompatibility between
+AGPL-3.0 and that license:
+
+  * GNU General Public License, version 2 only (GPL-2.0-only)
+  * Eclipse Public License, version 1.0 (EPL-1.0)
+  * Eclipse Public License, version 2.0 (EPL-2.0)
+  * Common Development and Distribution License, version 1.0 (CDDL-1.0)
+  * Common Development and Distribution License, version 1.1 (CDDL-1.1)
+
+This additional permission applies only to the combined work so distributed. It
+does not otherwise alter your rights or obligations under AGPL-3.0, and may be
+removed by any downstream recipient in accordance with AGPL-3.0 Section 7.
+
+For any other license (including more permissive or commercial terms), please
+open an issue in the project repository; such requests are considered on a
+case-by-case basis.

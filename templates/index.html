@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n="title">跨境个人税务助理</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1 data-i18n="title">跨境个人税务助理</h1>
+      <p class="subtitle" data-i18n="subtitle">中美税务居民身份判定 · 投资税负测算</p>
+    </div>
+    <button id="lang-toggle" type="button">EN</button>
+  </header>
+
+  <main>
+    <p class="disclaimer" data-i18n="disclaimer">本工具为财税教学演示原型，输出仅供参考，不构成税务意见。</p>
+
+    <form id="calc-form">
+      <section class="card">
+        <h2 data-i18n="cn_title">① 中国税务居民身份判定</h2>
+        <label class="row checkbox">
+          <input type="checkbox" id="china_has_domicile">
+          <span data-i18n="cn_domicile">在中国境内有住所（因户籍/家庭/经济利益关系而习惯性居住）</span>
+        </label>
+        <label class="row">
+          <span data-i18n="cn_days">境内居住「满 24 小时」的天数</span>
+          <input type="number" id="china_full24" min="0" max="366" value="0">
+        </label>
+        <label class="row">
+          <span data-i18n="cn_consec">此前连续「满 183 天且无单次离境超 30 天」的年度数（判断 6 年规则）</span>
+          <input type="number" id="china_consec" min="0" max="20" value="0">
+        </label>
+        <p class="hint" data-i18n="cn_hint">天数口径：仅「当天停留满 24 小时」计入（2019 年第 34 号公告）。</p>
+      </section>
+
+      <section class="card">
+        <h2 data-i18n="us_title">② 美国税务身份判定（实质停留测试）</h2>
+        <label class="row checkbox">
+          <input type="checkbox" id="us_gc">
+          <span data-i18n="us_gc">美国公民 / 绿卡持有人</span>
+        </label>
+        <div class="grid3">
+          <label class="row">
+            <span data-i18n="us_cur">当年在美总天数</span>
+            <input type="number" id="us_cur" min="0" max="366" value="0">
+          </label>
+          <label class="row">
+            <span data-i18n="us_p1">去年在美总天数</span>
+            <input type="number" id="us_p1" min="0" max="366" value="0">
+          </label>
+          <label class="row">
+            <span data-i18n="us_p2">前年在美总天数</span>
+            <input type="number" id="us_p2" min="0" max="366" value="0">
+          </label>
+        </div>
+        <fieldset class="excl">
+          <legend data-i18n="us_excl_legend">排除天数（不计入，默认 0）</legend>
+          <div class="grid5">
+            <label class="row"><span data-i18n="us_ex_commuter">加/墨通勤</span><input type="number" id="us_ex_commuter" min="0" value="0"></label>
+            <label class="row"><span data-i18n="us_ex_transit">过境且&lt;24h</span><input type="number" id="us_ex_transit" min="0" value="0"></label>
+            <label class="row"><span data-i18n="us_ex_crew">船员</span><input type="number" id="us_ex_crew" min="0" value="0"></label>
+            <label class="row"><span data-i18n="us_ex_medical">医疗</span><input type="number" id="us_ex_medical" min="0" value="0"></label>
+            <label class="row"><span data-i18n="us_ex_exempt">豁免天数合计</span><input type="number" id="us_ex_exempt" min="0" value="0" readonly></label>
+          </div>
+        </fieldset>
+        <div class="exempt-list">
+          <p class="hint" data-i18n="exempt_hint">豁免身份（可加多种，天数自动累加）：</p>
+          <div id="exempt-rows"></div>
+          <button type="button" id="exempt-add" class="add-btn" data-i18n="exempt_add">+ 添加豁免身份</button>
+        </div>
+        <p class="hint" data-i18n="us_hint">天数口径：当天任何时候在境内即算 1 天；「过境且不足 24 小时」为组合例外（AND，非 OR）。</p>
+      </section>
+
+      <section class="card">
+        <h2 data-i18n="tb_title">③ 双重居民（双方均居民时的处理）</h2>
+        <p class="hint" data-i18n="tb_hint">中美税收协定第 4 条第 2 款：个人双重居民由双方主管当局协商（MAP）确定，无机械判定标准；确定前视为事实上的双重居民，对双方均负纳税义务。</p>
+      </section>
+
+      <section class="card">
+        <h2 data-i18n="inc_title">④ 投资所得（股息红利 + 资本利得）</h2>
+        <div class="grid2">
+          <label class="row"><span data-i18n="div_cn">股息红利 · 中国来源（元）</span><input type="number" id="div_cn" min="0" value="0"></label>
+          <label class="row"><span data-i18n="div_us">股息红利 · 美国来源（美元）</span><input type="number" id="div_us" min="0" value="0"></label>
+        </div>
+        <div class="grid2">
+          <label class="row"><span data-i18n="cn_holding">A股持股月数（中国股息差别化）</span><input type="number" id="cn_holding" min="0" value="0"></label>
+          <label class="row"><span data-i18n="us_holding">美股持股天数（美国合格股息）</span><input type="number" id="us_holding" min="0" value="0"></label>
+        </div>
+        <div class="grid2">
+          <label class="row"><span data-i18n="cg_cn">资本利得 · 中国来源（元）</span><input type="number" id="cg_cn" min="0" value="0"></label>
+          <label class="row"><span data-i18n="cg_us">资本利得 · 美国来源（美元）</span><input type="number" id="cg_us" min="0" value="0"></label>
+        </div>
+        <label class="row"><span data-i18n="us_taxable">美国应纳税所得额（判定 LTCG 税率档）</span><input type="number" id="us_taxable" min="0" value="0"></label>
+      </section>
+
+      <section class="card">
+        <h2 data-i18n="hold_title">④ 持仓/交易（可选，逐笔录入股息 + 买卖）</h2>
+        <p class="hint" data-i18n="hold_hint">每条记录 = 一只股票持仓：录入「已收股息」和买卖信息；未卖出则选「未卖出」，未实现盈亏不征税。持有期自动联动股息税率（A股 3 档 / 美股合格与否）。</p>
+        <table id="hold-table">
+          <thead><tr>
+            <th data-i18n="div_entry_type">类型</th>
+            <th data-i18n="port_ticker">代码</th>
+            <th data-i18n="port_buy_date">买入日期</th>
+            <th data-i18n="port_buy_price">买入价</th>
+            <th data-i18n="port_qty">数量</th>
+            <th data-i18n="hold_sell_status">卖出状态</th>
+            <th data-i18n="port_sell_date">卖出日期</th>
+            <th data-i18n="port_sell_price">卖出价</th>
+            <th data-i18n="hold_dividend">已收股息</th>
+            <th></th>
+          </tr></thead>
+          <tbody id="hold-rows"></tbody>
+        </table>
+        <button type="button" id="hold-add" class="add-btn" data-i18n="hold_add">+ 添加一笔持仓</button>
+        <p class="hint" id="hold-summary"></p>
+      </section>
+
+      <section class="card">
+        <h2 data-i18n="sal_title">⑤ 工资薪金（wages / salary）</h2>
+        <div class="grid2">
+          <label class="row"><span data-i18n="sal_cn">中国来源（元）</span><input type="number" id="sal_cn" min="0" value="0"></label>
+          <label class="row"><span data-i18n="sal_us">美国来源（美元）</span><input type="number" id="sal_us" min="0" value="0"></label>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 data-i18n="svc_title">⑥ 劳务报酬 / 自雇（self-employment）</h2>
+        <div class="grid2">
+          <label class="row"><span data-i18n="svc_cn">中国来源（元）</span><input type="number" id="svc_cn" min="0" value="0"></label>
+          <label class="row"><span data-i18n="svc_us">美国来源（美元）</span><input type="number" id="svc_us" min="0" value="0"></label>
+        </div>
+        <label class="row checkbox"><input type="checkbox" id="us_has_fixed_base"><span data-i18n="cb_fixed_base">美国来源劳务在美国有固定基地（fixed base）</span></label>
+      </section>
+
+      <section class="card">
+        <h2 data-i18n="roy_title">⑦ 特许权使用费 / 稿酬（royalties & author's fees）</h2>
+        <p class="hint" data-i18n="roy_hint">含特许权使用费（专利、商标、著作权/版权、非专利技术等）与稿酬（写作、音乐等），均按 80% 计入综合所得。</p>
+        <div class="grid2">
+          <label class="row"><span data-i18n="roy_cn">中国来源（元）</span><input type="number" id="roy_cn" min="0" value="0"></label>
+          <label class="row"><span data-i18n="roy_us">美国来源（美元）</span><input type="number" id="roy_us" min="0" value="0"></label>
+        </div>
+        <label class="row checkbox"><input type="checkbox" id="us_royalty_connected"><span data-i18n="cb_royalty_connected">美国来源版税与美常设机构/固定基地有效联系</span></label>
+      </section>
+
+      <section class="card">
+        <h2 data-i18n="ded_title">⑧ 中国专项扣除（综合所得）</h2>
+        <h3 data-i18n="special_title">专项扣除（三险一金，据实）</h3>
+        <div class="grid4">
+          <label class="row"><span data-i18n="sp_pension">基本养老保险</span><input type="number" class="sp-amount" id="sp_pension" min="0" value="0"></label>
+          <label class="row"><span data-i18n="sp_medical">基本医疗保险</span><input type="number" class="sp-amount" id="sp_medical" min="0" value="0"></label>
+          <label class="row"><span data-i18n="sp_unemployment">失业保险</span><input type="number" class="sp-amount" id="sp_unemployment" min="0" value="0"></label>
+          <label class="row"><span data-i18n="sp_housing">住房公积金</span><input type="number" class="sp-amount" id="sp_housing" min="0" value="0"></label>
+        </div>
+        <h3 data-i18n="additional_title">专项附加扣除（7 项，定额自动算）</h3>
+        <label class="row checkbox"><input type="checkbox" id="ad_child"><span data-i18n="ad_child">子女教育（2000元/月/子女）</span><input type="number" id="ad_child_cnt" min="1" value="1" class="inline-num"></label>
+        <label class="row checkbox"><input type="checkbox" id="ad_continue"><span data-i18n="ad_continue">继续教育（400元/月）</span></label>
+        <label class="row checkbox"><input type="checkbox" id="ad_illness"><span data-i18n="ad_illness">大病医疗（据实，限额8万）</span><input type="number" id="ad_illness_amt" min="0" value="0" class="inline-num"></label>
+        <label class="row checkbox"><input type="checkbox" id="ad_loan"><span data-i18n="ad_loan">住房贷款利息（1000元/月）</span></label>
+        <label class="row checkbox"><input type="checkbox" id="ad_rent"><span data-i18n="ad_rent">住房租金</span>
+          <select id="ad_rent_city" class="inline-sel">
+            <option value="1500" data-i18n="ad_rent_1500">1500元/月（直辖市/省会/计划单列市）</option>
+            <option value="1100" data-i18n="ad_rent_1100">1100元/月（户籍人口&gt;100万城市）</option>
+            <option value="800" data-i18n="ad_rent_800">800元/月（户籍人口≤100万城市）</option>
+          </select>
+        </label>
+        <label class="row checkbox"><input type="checkbox" id="ad_elderly"><span data-i18n="ad_elderly">赡养老人（3000元/月）</span></label>
+        <label class="row checkbox"><input type="checkbox" id="ad_infant"><span data-i18n="ad_infant">3岁以下婴幼儿照护（2000元/月/婴幼儿）</span><input type="number" id="ad_infant_cnt" min="1" value="1" class="inline-num"></label>
+        <label class="row"><span data-i18n="fx_rate">汇率（1 USD = ? CNY，默认 7.0 近似）</span><input type="number" id="fx_rate" min="0" step="0.01" value="7.0"></label>
+      </section>
+
+      <section class="card">
+        <h2 data-i18n="cal_title">停留日历（可选，逐条录入入境/离境）</h2>
+        <div class="grid2">
+          <div>
+            <h3 data-i18n="cal_cn">中国停留（满24小时计1天）</h3>
+            <div id="cn-trip-rows"></div>
+            <button type="button" id="cn-trip-add" class="add-btn" data-i18n="cal_add_cn">+ 添加中国行程</button>
+          </div>
+          <div>
+            <h3 data-i18n="cal_us">美国停留（任意时点计1天）</h3>
+            <div id="us-trip-rows"></div>
+            <button type="button" id="us-trip-add" class="add-btn" data-i18n="cal_add_us">+ 添加美国行程</button>
+          </div>
+        </div>
+        <p class="hint" data-i18n="cal_hint">录入后自动填入上方「满24小时天数」和「当年在美总天数」，仍可手动覆盖。</p>
+      </section>
+
+      <div class="btn-row">
+        <button type="submit" class="submit" data-i18n="calc_btn">计算</button>
+        <button type="button" id="reset-btn" class="reset" data-i18n="reset_btn">重置</button>
+      </div>
+    </form>
+
+    <section class="card" id="legal-links">
+      <h2 data-i18n="legal_title">法规原文链接</h2>
+      <ul id="legal-links-list" class="legal-list"></ul>
+    </section>
+
+    <div id="results" class="hidden"></div>
+  </main>
+
+  <script src="/static/i18n.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>
+

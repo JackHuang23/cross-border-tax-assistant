@@ -1,0 +1,419 @@
+<!DOCTYPE html><html lang='en'><head><meta charset='utf-8'><title>Legal Basis & Citations</title><style>
+body{font-family:'Noto Sans CJK SC','WenQuanYi Micro Hei','SimSun',sans-serif;max-width:860px;margin:40px auto;padding:0 24px;line-height:1.7;color:#1f2937;font-size:13.5px}
+h1{font-size:23px;border-bottom:3px solid #b91c1c;padding-bottom:10px}
+h2{font-size:18px;border-bottom:1px solid #cbd5e1;padding-bottom:6px;margin-top:28px;color:#b91c1c}
+h3{font-size:15.5px;margin-top:22px;color:#111827}
+h4{font-size:14px;margin-top:16px;color:#374151}
+blockquote{border-left:4px solid #b91c1c;margin:9px 0;padding:7px 14px;background:#fef2f2;color:#334155;border-radius:0 6px 6px 0}
+table{border-collapse:collapse;width:100%;margin:10px 0}
+th,td{border:1px solid #d1d5db;padding:5px 9px;text-align:left;font-size:12.5px}
+th{background:#fafafa;font-weight:600}
+code{background:#f1f5f9;padding:2px 5px;border-radius:4px;font-size:12.5px}
+strong{color:#0f172a}
+a{color:#b91c1c}
+</style></head><body><h1>Legal Basis &amp; Citations</h1>
+<blockquote>
+<p>Cross-Border Individual Tax Assistant — the statutory basis and citation sources for every rule implemented in the engine.
+<strong>Methodology</strong>: <strong>Primary sources</strong> = government / official documents (State Taxation Administration 国家税务总局, State Council 国务院, Ministry of Finance / State Taxation Administration 财政部/税务总局, IRS, and the two governments). <strong>Secondary sources</strong> = non-government (PwC, KPMG, law firms) — used <strong>only for cross-checking</strong> figures.
+<strong>Language</strong>: This document is written in English; <strong>Chinese legal terms are kept in Chinese</strong> (e.g., 《个人所得税法》, 财税〔2015〕101 号, 居民个人).</p>
+</blockquote>
+<hr />
+<h2>I. China Tax Law (Primary · Government)</h2>
+<h3>1. Individual Income Tax Law of the People's Republic of China</h3>
+<p>《中华人民共和国个人所得税法》（2018 amendment）</p>
+<p><strong>Source</strong>: State Taxation Administration (国家税务总局)
+<strong>URL</strong>: https://www.chinatax.gov.cn/n810219/n810744/n3752930/n3752974/c3970366/content.html</p>
+<h4>Article 1 — 居民个人 / 非居民个人 (resident vs non-resident individual)</h4>
+<ul>
+<li><strong>Citation</strong>: <em>《个人所得税法》Art. 1</em></li>
+<li><strong>Rule</strong>: An individual who is <strong>domiciled in China (在中国境内有住所)</strong>, or who is not domiciled but has resided in China for <strong>183 days or more</strong> in a tax year, is a <strong>resident individual (居民个人)</strong> and is taxed on worldwide income. Otherwise the individual is a <strong>non-resident individual (非居民个人)</strong>, taxed only on China-source income.</li>
+<li><strong>Engine use</strong>: China residency determination (<code>residency.py</code>)</li>
+</ul>
+<h4>Article 2 — Categories of taxable income</h4>
+<ul>
+<li><strong>Citation</strong>: <em>《个人所得税法》Art. 2</em></li>
+<li><strong>Rule</strong>: Nine categories of income are taxable, including (1) wages and salaries (工资、薪金所得), (2) remuneration for labour services (劳务报酬所得), (3) author's remuneration (稿酬所得), (4) royalties (特许权使用费所得), (5) business income (经营所得), (6) interest, dividends and bonuses (利息、股息、红利所得), (7) property lease income, (8) property transfer income, and (9) incidental income. For resident individuals, items (1)–(4) are consolidated as <strong>comprehensive income (综合所得)</strong>.</li>
+<li><strong>Engine use</strong>: income classification</li>
+</ul>
+<h4>Article 3 — Tax rates</h4>
+<ul>
+<li><strong>Citation</strong>: <em>《个人所得税法》Art. 3</em></li>
+<li><strong>Rule</strong>: <strong>Comprehensive income (综合所得)</strong> is taxed at progressive rates of <strong>3%–45%</strong>; business income (经营所得) at <strong>5%–35%</strong>; interest/dividends/property-transfer/incidental income at a flat <strong>20%</strong>.</li>
+<li><strong>Engine use</strong>: tax-rate tables (<code>constants.py</code>)</li>
+</ul>
+<h4>Article 6 — Computation of taxable income (deductions)</h4>
+<ul>
+<li><strong>Citation</strong>: <em>《个人所得税法》Art. 6</em></li>
+<li><strong>Rule</strong>: For resident individuals, comprehensive income taxable base = annual income <strong>minus RMB 60,000</strong> (基本减除费用), <strong>special deductions (专项扣除)</strong> and <strong>special additional deductions (专项附加扣除)</strong> and <strong>other deductions determined by law (依法确定的其他扣除)</strong>. For non-residents, monthly salary income is reduced by RMB 5,000. Labour remuneration, author's remuneration and royalties are reduced by <strong>20%</strong> to arrive at the income amount; <strong>author's remuneration is then further reduced by 70%</strong> (i.e., ×80%×70% = ×56%).</li>
+<li><strong>Special deductions (专项扣除)</strong> = social insurance contributions (basic pension 基本养老保险, basic medical 基本医疗保险, unemployment 失业保险) and housing fund (住房公积金).</li>
+<li><strong>Special additional deductions (专项附加扣除)</strong> = children's education (子女教育), continuing education (继续教育), serious-illness medical expenses (大病医疗), housing loan interest (住房贷款利息), housing rent (住房租金), and support for the elderly (赡养老人).</li>
+<li><strong>Engine use</strong>: comprehensive-income taxable base (<code>calculator.py</code>)</li>
+</ul>
+<h4>Article 7 — Foreign tax credit</h4>
+<ul>
+<li><strong>Citation</strong>: <em>《个人所得税法》Art. 7</em></li>
+<li><strong>Rule</strong>: A resident individual may <strong>credit foreign income tax paid</strong> against Chinese tax on foreign-source income, capped at the Chinese tax computed on that income.</li>
+<li><strong>Engine use</strong>: foreign tax credit (<code>foreign_tax_credit_limit</code>)</li>
+</ul>
+<h4>Article 11 &amp; 13 — Filing deadlines</h4>
+<ul>
+<li><strong>Citation</strong>: <em>《个人所得税法》Art. 11, Art. 13</em></li>
+<li><strong>Rule</strong>: Annual settlement (汇算清缴) for comprehensive income and reporting of foreign-source income must be completed between <strong>1 March and 30 June of the following year</strong>.</li>
+</ul>
+<hr />
+<h3>2. Implementing Regulations of the Individual Income Tax Law</h3>
+<p>《中华人民共和国个人所得税法实施条例》（State Council Decree No. 707, effective 1 Jan 2019）</p>
+<p><strong>Source</strong>: State Taxation Administration (国家税务总局)
+<strong>URL</strong>: https://www.chinatax.gov.cn/chinatax/n810219/n810744/n3752930/n3752974/c3963364/content.html</p>
+<h4>Article 2 — Definition of "domicile"</h4>
+<ul>
+<li><strong>Citation</strong>: <em>《实施条例》Art. 2</em></li>
+<li><strong>Rule</strong>: "Domiciled in China (在中国境内有住所)" means <strong>habitual residence in China by reason of household registration, family or economic interests</strong> (因户籍、家庭、经济利益关系而习惯性居住).</li>
+<li><strong>Engine use</strong>: domicile test (UI guidance)</li>
+</ul>
+<h4>Article 4 — Six-year rule and the 30-day reset</h4>
+<ul>
+<li><strong>Citation</strong>: <em>《实施条例》Art. 4</em></li>
+<li><strong>Rule</strong>: A non-domiciled individual whose residence meets 183 days for <strong>less than six consecutive years</strong> is <strong>exempt</strong> from Chinese tax on foreign-source income paid by a foreign payer. Once 183 days has been met for <strong>six consecutive years</strong>, worldwide income becomes taxable. A <strong>single departure exceeding 30 days</strong> in any year <strong>resets</strong> the consecutive-year count.</li>
+<li><strong>Engine use</strong>: 6-year rule + 30-day reset (<code>six_year_rule_triggered</code>)</li>
+</ul>
+<h4>Article 5 — The 90-day rule</h4>
+<ul>
+<li><strong>Citation</strong>: <em>《实施条例》Art. 5</em></li>
+<li><strong>Rule</strong>: A non-domiciled individual residing in China for <strong>no more than 90 days</strong> is <strong>exempt</strong> on China-source income paid by a foreign employer and not borne by that employer's Chinese establishment.</li>
+<li><strong>Engine use</strong>: 90-day rule (<code>ninety_day_exemption</code>)</li>
+</ul>
+<h4>Article 21 — Foreign tax credit limit</h4>
+<ul>
+<li><strong>Citation</strong>: <em>《实施条例》Art. 21</em></li>
+<li><strong>Rule</strong>: Defines the credit limit (抵免限额) for foreign tax paid on foreign-source income, computed separately by country and by income category.</li>
+<li><strong>Engine use</strong>: foreign tax credit limit</li>
+</ul>
+<hr />
+<h3>3. Announcement No. 34 of 2019 (residence-day counting)</h3>
+<p>财政部 税务总局公告 2019 年第 34 号</p>
+<p><strong>Source</strong>: State Taxation Administration policy database
+<strong>URL</strong>: https://www.chinatax.gov.cn/chinatax/n810219/n810744/n3752930/n3752974/c4151944/content.html</p>
+<ul>
+<li><strong>Citation</strong>: <em>财政部 税务总局公告 2019 年第 34 号</em></li>
+<li><strong>Rule</strong>: (1) A non-domiciled individual who meets 183 days in a tax year is taxable on worldwide income <strong>only if, in each of the previous six years (此前六年)</strong>, the individual met 183 days <strong>and</strong> had <strong>no single departure exceeding 30 days</strong>; otherwise foreign-source income paid by a foreign payer is exempt. (2) Days of residence are counted by <strong>days of physical stay of a full 24 hours</strong> — a day of less than 24 hours is <strong>not counted</strong> (满 24 小时计入，不足 24 小时不计入).</li>
+<li><strong>Engine use</strong>: residence-day counting (full-24-hour rule) + precise six-year rule</li>
+</ul>
+<hr />
+<h3>4. Caishui [2015] No. 101 (A-share dividend differential)</h3>
+<p>财税〔2015〕101 号</p>
+<ul>
+<li><strong>Citation</strong>: <em>财税〔2015〕101 号</em></li>
+<li><strong>Rule</strong>: Dividends on A-shares held <strong>more than 1 year</strong> are exempt; held <strong>1 month or less (含 1 个月)</strong> are taxed at an effective <strong>20%</strong>; held <strong>more than 1 month up to 1 year (含 1 年)</strong> at an effective <strong>10%</strong>.</li>
+<li><strong>Engine use</strong>: A-share dividend differential (≤1m 20% / 1m–1y 10% / &gt;1y 0%)</li>
+</ul>
+<hr />
+<h3>5. Caishuizi [1998] No. 61 (A-share transfer exemption)</h3>
+<p>财税字〔1998〕61 号</p>
+<ul>
+<li><strong>Citation</strong>: <em>财税字〔1998〕61 号</em></li>
+<li><strong>Rule</strong>: Gains from transferring listed-company shares acquired on the public markets of the Shanghai and Shenzhen stock exchanges are <strong>exempt from individual income tax</strong>.</li>
+<li><strong>Engine use</strong>: A-share capital-gain exemption</li>
+</ul>
+<hr />
+<h2>II. U.S. Tax Law (Primary · Government)</h2>
+<h3>6. Agreement Between the U.S. and China for the Avoidance of Double Taxation (1984)</h3>
+<p><strong>Source</strong>: IRS (official treaty PDF)
+<strong>URL</strong>: https://www.irs.gov/pub/irs-trty/china.pdf</p>
+<h4>Article 4 — Residence (dual residency)</h4>
+<ul>
+<li><strong>Citation</strong>: <em>(U.S.–China Tax Treaty, art. 4, ¶ 2)</em></li>
+<li><strong>Original text</strong>:<blockquote>
+<p>Where by reason of the provisions of paragraph 1 an individual is a resident of both Contracting States, then the competent authorities of the Contracting States shall determine <strong>through consultations</strong> the Contracting State of which that individual shall be deemed to be a resident for the purposes of this Agreement.</p>
+</blockquote>
+</li>
+<li><strong>Engine use</strong>: dual-resident treatment (mutual agreement procedure, not a mechanical tie-breaker)</li>
+</ul>
+<h4>Article 9 — Dividends (10%)</h4>
+<ul>
+<li><strong>Citation</strong>: <em>(U.S.–China Tax Treaty, art. 9, ¶ 2)</em></li>
+<li><strong>Original text</strong>:<blockquote>
+<p>...if the recipient is the beneficial owner of the dividends the tax so charged <strong>shall not exceed 10 percent of the gross amount of the dividends</strong>.</p>
+</blockquote>
+</li>
+<li><strong>Engine use</strong>: U.S. dividend withholding (NRA 30% → treaty 10%)</li>
+</ul>
+<h4>Article 11 — Royalties (10%) and the permanent-establishment exception</h4>
+<ul>
+<li><strong>Citation</strong>: <em>(U.S.–China Tax Treaty, art. 11, ¶¶ 2 &amp; 4)</em></li>
+<li><strong>Original text (¶ 2)</strong>:<blockquote>
+<p>...such royalties may also be taxed in the Contracting State in which they arise ... but if the recipient is the beneficial owner of the royalties, the tax so charged shall not exceed <strong>10 percent of the gross amount of the royalties</strong>.</p>
+</blockquote>
+</li>
+<li><strong>Original text (¶ 4, the "connection" test)</strong>:<blockquote>
+<p>The provisions of paragraphs 1 and 2 shall not apply if the beneficial owner of the royalties ... carries on business in the other Contracting State ... through a <strong>permanent establishment</strong> situated therein, or performs ... independent personal services from a <strong>fixed base</strong> situated therein, and the right or property ... is <strong>effectively connected</strong> with such permanent establishment or fixed base. In such case the provisions of <strong>Article 7 or 13</strong>, as the case may be, shall apply.</p>
+</blockquote>
+</li>
+<li><strong>Engine use</strong>: cross-border royalties — passive royalties 10%; royalties effectively connected with a U.S. PE/fixed base taxed as business profits instead</li>
+</ul>
+<h4>Article 13 — Independent Personal Services (cross-border self-employment / contracting)</h4>
+<ul>
+<li><strong>Citation</strong>: <em>(U.S.–China Tax Treaty, art. 13, ¶ 1)</em></li>
+<li><strong>Original text</strong>:<blockquote>
+<p>Income derived by an individual who is a resident of a Contracting State in respect of professional services or other activities of an independent character shall be taxable <strong>only in that Contracting State</strong>, unless he has a <strong>fixed base</strong> regularly available to him in the other Contracting State ... or he is <strong>present in that other Contracting State for a period or periods exceeding in the aggregate 183 days</strong> in the calendar year concerned.</p>
+</blockquote>
+</li>
+<li><strong>Engine use</strong>: cross-border self-employment — taxable only in the residence state unless there is a U.S. fixed base or &gt;183-day U.S. presence</li>
+</ul>
+<h4>Article 14 — Dependent Personal Services (cross-border employment)</h4>
+<ul>
+<li><strong>Citation</strong>: <em>(U.S.–China Tax Treaty, art. 14)</em></li>
+<li><strong>Original text</strong>:<blockquote>
+<p>...salaries, wages and other similar remuneration derived by a resident of a Contracting State in respect of an employment shall be taxable <strong>only in that Contracting State unless the employment is exercised in the other Contracting State</strong> ... remuneration ... shall be taxable only in the first-mentioned State if: (a) the recipient is present in the other Contracting State ... <strong>not exceeding in the aggregate 183 days</strong>; and (b) the remuneration is paid by ... an employer who is <strong>not a resident of the other Contracting State</strong>; and (c) the remuneration is <strong>not borne by a permanent establishment or a fixed base</strong> which the employer has in the other Contracting State.</p>
+</blockquote>
+</li>
+<li><strong>Engine use</strong>: cross-border employment — the 183-day / non-resident-employer / no-PE triple test</li>
+</ul>
+<h4>Article 22 — Elimination of Double Taxation</h4>
+<ul>
+<li><strong>Citation</strong>: <em>(U.S.–China Tax Treaty, art. 22, ¶ 1)</em></li>
+<li><strong>Original text</strong>:<blockquote>
+<p>In the People's Republic of China, double taxation shall be eliminated as follows: ... the amount of the United States income tax payable ... <strong>shall be allowed as a credit against the Chinese tax</strong> imposed on that resident.</p>
+</blockquote>
+</li>
+<li><strong>Engine use</strong>: foreign tax credit</li>
+</ul>
+<hr />
+<h3>7. IRS Substantial Presence Test</h3>
+<p><strong>Source</strong>: IRS
+<strong>URL</strong>: https://www.irs.gov/individuals/international-taxpayers/substantial-presence-test</p>
+<ul>
+<li><strong>Citation</strong>: <em>(IRS, Substantial Presence Test)</em></li>
+<li><strong>Original text</strong>:<blockquote>
+<p>You are treated as present in the U.S. on any day you are physically present in the country, <strong>at any time during the day</strong>. However, there are exceptions to this rule. Do not count the following as days of presence ... Days you are in the U.S. for less than 24 hours, <strong>when you are in transit between two places outside the United States</strong>.</p>
+</blockquote>
+</li>
+<li><strong>Engine use</strong>: U.S. residency determination and day-counting (any-time rule, five exclusions; "in transit &lt;24h" is a combined AND condition)</li>
+</ul>
+<hr />
+<h3>8. IRS Publication 519, U.S. Tax Guide for Aliens</h3>
+<p><strong>Source</strong>: IRS
+<strong>URL</strong>: https://www.irs.gov/publications/p519</p>
+<ul>
+<li><strong>Citation</strong>: <em>(IRS Pub. 519)</em></li>
+<li><strong>Rule — two classes of NRA income</strong>:</li>
+<li><strong>Effectively Connected Income (ECI)</strong> — income effectively connected with a U.S. trade or business, taxed at <strong>graduated (ordinary) rates</strong> rather than 30% withholding.</li>
+<li><strong>FDAP income (fixed, determinable, annual or periodic)</strong> — such as dividends, interest and royalties, subject to <strong>30% withholding</strong> (or a lower treaty rate), <strong>unless</strong> effectively connected.</li>
+<li><strong>Rule — exempt individuals (days not counted for the SPT)</strong>: foreign government-related individuals on A/G visas (diplomats), teachers/trainees on J/Q visas, and students on F/J/M/Q visas — their days of presence are <strong>excluded</strong> from the substantial presence test.</li>
+<li><strong>Engine use</strong>: NRA income classification; exempt-individual days (the <code>exempt</code> exclusion in <code>us_countable_days</code>)</li>
+</ul>
+<hr />
+<h3>9. IRC — capital losses and carryover</h3>
+<ul>
+<li><strong>Citation</strong>: <em>(IRC §1211(b), §1212(b))</em>; per IRS Pub 550 (2025)</li>
+<li><strong>URL</strong>: https://www.irs.gov/publications/p550</li>
+<li><strong>Original text</strong>:<blockquote>
+<p>If your capital losses are more than your capital gains, you can claim a capital loss deduction ... <strong>$3,000 ($1,500 if you are married and file a separate return)</strong>...</p>
+</blockquote>
+</li>
+<li><strong>Engine use</strong>: capital-loss deduction capped at $3,000/year, with indefinite carryforward for individuals (the §1256-contract 3-year carryback rule applies only to futures/options, which are out of scope)</li>
+</ul>
+<hr />
+<h3>10. IRC §1(h) — long-term capital gains / qualified dividends</h3>
+<ul>
+<li><strong>Citation</strong>: <em>(IRC §1(h), §1(h)(11))</em>; per Rev. Proc. 2025-32</li>
+<li><strong>Original text</strong> (Rev. Proc. 2025-32, §3.03):<blockquote>
+<p>Maximum Capital Gains Rate (§ 1(h), § 1(j)(5)). For taxable years beginning in 2026 ... <strong>All Other Individuals — Maximum Zero Rate Amount $49,450; Maximum 15% Rate Amount $545,500</strong>.</p>
+</blockquote>
+</li>
+<li><strong>Engine use</strong>: long-term capital gain / qualified-dividend rates 0% / 15% / 20% (2026 thresholds $49,450 / $545,500); qualified dividends require holding &gt;60 days (121-day window)</li>
+</ul>
+<hr />
+<h3>11. 2026 inflation adjustments (incl. OBBB amendments) — standard deduction &amp; ordinary brackets</h3>
+<p><strong>Source</strong>: IRS Newsroom
+<strong>URL</strong>: https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2026-including-amendments-from-the-one-big-beautiful-bill</p>
+<ul>
+<li><strong>Citation</strong>: <em>(IRS Newsroom, 2026 Inflation Adjustments)</em></li>
+<li><strong>Original text</strong>:<blockquote>
+<p>For single taxpayers and married individuals filing separately, the standard deduction <strong>rises to $16,100</strong> for tax year 2026...
+For tax year 2026, the top tax rate remains <strong>37%</strong> ... 35% for incomes over <strong>$256,225</strong>; 32% ... <strong>$201,775</strong>; 24% ... <strong>$105,700</strong>; 22% ... <strong>$50,400</strong>; 12% ... <strong>$12,400</strong>. The lowest rate is <strong>10%</strong> for incomes of <strong>$12,400 or less</strong>.</p>
+</blockquote>
+</li>
+<li><strong>Engine use</strong>: standard deduction $16,100 + ordinary brackets 10%–37%</li>
+</ul>
+<hr />
+<h3>12. FICA and Self-Employment Tax</h3>
+<h4>Employee FICA and the 2026 Social Security wage base</h4>
+<p><strong>Source</strong>: IRS Topic No. 751
+<strong>URL</strong>: https://www.irs.gov/taxtopics/tc751
+- <strong>Citation</strong>: <em>(IRS Topic 751)</em>
+- <strong>Original text</strong>:</p>
+<blockquote>
+<p>The current tax rate for Social Security is <strong>6.2% for the employer and 6.2% for the employee, or 12.4% total</strong>. The current rate for Medicare is <strong>1.45% for the employer and 1.45% for the employee, or 2.9% total</strong>.
+<strong>For earnings in 2026, this base limit is $184,500</strong>.
+Additional Medicare tax applies ... <strong>0.9%</strong> ... on an individual's wages paid in excess of <strong>$200,000</strong>.
+- <strong>Engine use</strong>: employee FICA 7.65%; 2026 SS wage base $184,500; Additional Medicare 0.9%</p>
+</blockquote>
+<h4>Self-Employment Tax</h4>
+<p><strong>Source</strong>: IRS Schedule SE (Form 1040), 2025
+<strong>URL</strong>: https://www.irs.gov/pub/irs-pdf/f1040sse.pdf
+- <strong>Citation</strong>: <em>(IRS Form 1040, Schedule SE)</em>
+- <strong>Original text</strong>:</p>
+<blockquote>
+<p>4a If line 3 is more than zero, <strong>multiply line 3 by 92.35%</strong> (0.9235)... 4c ... If less than <strong>$400</strong>, stop; you don't owe self-employment tax.
+10 Multiply the smaller of line 6 or line 9 by <strong>12.4%</strong> (0.124)... 11 Multiply line 6 by <strong>2.9%</strong> (0.029).
+13 Deduction for one-half of self-employment tax. Multiply line 12 by <strong>50% (0.50)</strong>.
+- <strong>Engine use</strong>: SE tax 15.3% (92.35% base, $400 threshold, 12.4% capped at the wage base + 2.9% uncapped) + the 1/2-SE-tax deduction</p>
+</blockquote>
+<h4>Reporting self-employment income and the above-the-line deduction</h4>
+<p><strong>Source</strong>: IRS Schedule C (Form 1040), 2025 and Schedule 1 (Form 1040)
+<strong>URL</strong>: https://www.irs.gov/pub/irs-pdf/f1040sc.pdf · https://www.irs.gov/pub/irs-pdf/f1040s1.pdf
+- <strong>Citation</strong>: <em>(IRS Form 1040, Schedule C; Schedule 1, line 15)</em>
+- <strong>Structure</strong>: Schedule C Part I (gross receipts − returns − COGS = gross profit) → Part II expenses → net profit flows to Schedule SE and Form 1040. Schedule 1 line 15: "Deductible part of self-employment tax."
+- <strong>Engine use</strong>: self-employment net income; the 1/2-SE-tax deduction is above-the-line</p>
+<hr />
+<h3>13. OBBB (One Big Beautiful Bill Act, H.R. 1) — charitable deduction changes</h3>
+<p><strong>Source</strong>: Greenberg Traurig GT Alert (2025-10-28); Fidelity Charitable (cross-check)
+<strong>URL</strong>: https://www.gtlaw.com/en/insights/2025/10/new-limitations-on-charitable-deductions-take-effect-in-2026
+<strong>URL</strong>: https://www.fidelitycharitable.org/articles/obbb-tax-reform.html</p>
+<ul>
+<li><strong>Citation</strong>: <em>(GT Alert, New Limitations on Charitable Deductions Take Effect in 2026)</em></li>
+<li><strong>Original text</strong>:<blockquote>
+<p>...the <strong>60% contribution base limitation</strong> applicable to cash contributions to public charities ... <strong>has been made permanent</strong>.
+...charitable contributions are deductible <strong>only to the extent the aggregate contributions exceed 0.5% of the taxpayer's contribution base</strong> (AGI)...
+...taxpayers in the top tax bracket have a maximum deduction benefit of <strong>35%</strong> per dollar donated, a reduction from the prior maximum benefit of <strong>37%</strong>.</p>
+</blockquote>
+</li>
+<li><strong>Original text</strong> (Fidelity):<blockquote>
+<p>...non-itemizers to deduct cash donations ... up to <strong>$1,000</strong> for single filers or <strong>$2,000</strong> for married couples filing jointly.</p>
+</blockquote>
+</li>
+<li><strong>Engine use</strong>: U.S. charitable deduction (not separately modelled in the MVP, which uses the standard-deduction approach; rules documented for the presentation)</li>
+</ul>
+<hr />
+<h2>III. Secondary Sources (Non-government · cross-check only)</h2>
+<h3>14. PwC Worldwide Tax Summaries (China individual tax)</h3>
+<ul>
+<li><strong>Use</strong>: cross-checking the quick-deduction amounts (速算扣除数) of the China comprehensive-income rate table (2520 / 16920 / 31920 / 52920 / 85920 / 181920)</li>
+<li><strong>URL</strong>: https://taxsummaries.pwc.com/peoples-republic-of-china/individual/taxes-on-personal-income</li>
+</ul>
+<h3>15. KPMG TaxNewsFlash (OBBB, exempt organizations)</h3>
+<ul>
+<li><strong>Use</strong>: background on the OBBB (H.R. 1)</li>
+<li><strong>URL</strong>: https://kpmg.com/kpmg-us/content/dam/kpmg/taxnewsflash/pdf/2025/05/TNFEO_May30_2025.pdf</li>
+</ul>
+<blockquote>
+<p>Note: the non-government sources above (PwC, KPMG, law firms) are used <strong>only for cross-checking figures</strong>; the authoritative basis for the engine is the primary (government/official) sources above.</p>
+</blockquote>
+<hr />
+<hr />
+<h2>IV. Filing Forms &amp; Deadlines (Advisory)</h2>
+<p>Forms the taxpayer must file, and information returns they will receive, by residency status.</p>
+<h3>Status / withholding forms (required for any U.S.-source income)</h3>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Form</th>
+<th>Purpose</th>
+<th>Deadline</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>U.S. person (resident)</td>
+<td><strong>Form W-9</strong></td>
+<td>Provide TIN to U.S. payers</td>
+<td>Before first payment</td>
+</tr>
+<tr>
+<td>Nonresident alien (NRA)</td>
+<td><strong>Form W-8BEN</strong></td>
+<td>Certify foreign status and claim treaty benefits (dividend/royalty 10%)</td>
+<td>Before first payment (update on change of circumstances)</td>
+</tr>
+</tbody>
+</table>
+<h3>Annual returns</h3>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Form</th>
+<th>Deadline</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>U.S. resident</td>
+<td><strong>Form 1040</strong></td>
+<td>April 15</td>
+</tr>
+<tr>
+<td>U.S. resident</td>
+<td>Schedule B (dividends/interest); Schedule D + Form 8949 (capital gains)</td>
+<td>With Form 1040</td>
+</tr>
+<tr>
+<td>U.S. resident</td>
+<td>Form 1116 (foreign tax credit); Form 8938 (FATCA)</td>
+<td>With Form 1040</td>
+</tr>
+<tr>
+<td>U.S. resident</td>
+<td>FinCEN Form 114 (FBAR — foreign accounts &gt; $10,000)</td>
+<td>April 15 (automatic extension to Oct 15)</td>
+</tr>
+<tr>
+<td>NRA</td>
+<td><strong>Form 1040-NR</strong></td>
+<td>April 15 (June 15 if no wages subject to withholding)</td>
+</tr>
+<tr>
+<td>NRA claiming treaty benefits</td>
+<td><strong>Form 8833</strong> (treaty-based return position)</td>
+<td>With Form 1040-NR</td>
+</tr>
+</tbody>
+</table>
+<h3>Exempt individuals (students / teachers / diplomats)</h3>
+<table>
+<thead>
+<tr>
+<th>Form</th>
+<th>Deadline</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Form 8843</strong> (days excluded from the substantial presence test)</td>
+<td>With the return, or by the return due date if no return is required</td>
+</tr>
+</tbody>
+</table>
+<h3>Information returns received (issued by payers, not filed by the taxpayer)</h3>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Form</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>U.S. person</td>
+<td>Form 1099-DIV / 1099-INT / 1099-B / 1099-NEC / 1099-MISC</td>
+<td>Mailed by Jan 31 (Feb 15 for 1099-B)</td>
+</tr>
+<tr>
+<td>NRA</td>
+<td><strong>Form 1042-S</strong> (U.S.-source income subject to withholding)</td>
+<td>Mailed by Mar 15</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sources</strong>: Form W-8BEN / W-9 (IRC §1441, §6109); Form 1040 / 1040-NR (IRC §6012); Form 8833 (IRC §6114); Form 8843 (IRC §7701(b)); Form 8938 (IRC §6038D); FinCEN Form 114 (31 U.S.C. §5314); Form 1116 (IRC §901); 1099 series / 1042-S (IRC §6041, §6042, §6045, §1461).</p>
+<hr />
+<h2>Appendix: Citation Methodology</h2>
+<ol>
+<li><strong>Primary vs secondary</strong>: primary = government/official documents (State Taxation Administration 国家税务总局, State Council 国务院, Ministry of Finance / State Taxation Administration 财政部/税务总局, IRS, and the two governments); secondary = non-government institutions (PwC, KPMG, law firms).</li>
+<li><strong>Language</strong>: Chinese legal terms are kept in Chinese; all other text is in English.</li>
+<li><strong>In-text citation format</strong>: statutes use <em>《法名》Art. X</em> or <em>(Source, art. X)</em>; administrative documents use their document number (e.g., <em>财税〔2015〕101 号</em>).</li>
+<li>Every computed figure in the engine carries its corresponding citation (see the <code>cite</code> / <code>citations</code> fields in <code>tax_engine/</code> and <code>app.py</code>), so every number is traceable to its legal basis.</li>
+</ol></body></html>

@@ -1,0 +1,59 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  binaries:
+    name: Build ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            name: linux-x64
+            artifact: cross-border-tax-assistant-linux-x64
+          - os: windows-latest
+            name: windows-x64
+            artifact: cross-border-tax-assistant-windows-x64
+          - os: macos-latest
+            name: macos-arm64
+            artifact: cross-border-tax-assistant-macos-arm64
+          - os: macos-13
+            name: macos-x64
+            artifact: cross-border-tax-assistant-macos-x64
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: pip install pyinstaller -r requirements.txt
+      - name: Build with PyInstaller
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = "Windows" ]; then SEP=";"; else SEP=":"; fi
+          pyinstaller --onedir --name "${{ matrix.artifact }}" \
+            --add-data "templates${SEP}templates" \
+            --add-data "static${SEP}static" \
+            --add-data "docs${SEP}docs" \
+            app.py
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: dist/${{ matrix.artifact }}/
+
+  docker:
+    name: Build Docker image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          tags: cross-border-tax-assistant:latest

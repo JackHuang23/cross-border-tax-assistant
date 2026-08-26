@@ -41,6 +41,19 @@ python3 -m venv venv
 - Windows：双击 `run.bat`
 - Linux / macOS：`./run.sh`
 
+## 📦 发布版（二进制包）
+
+GitHub Release 提供各平台可执行文件（无需安装 Python）：
+
+| 文件 | 平台 |
+|---|---|
+| `...-windows-x64.zip` | Windows 10/11（x64）|
+| `...-macos-arm64.tar.gz` | macOS（Apple Silicon）|
+| `...-linux-x64.tar.gz` | Linux（x86_64，glibc ≥ 2.39）|
+| `...-python.zip` | 任何系统（只需 Python 3.9+）|
+
+> ⚠️ **Linux 二进制注意**：`linux-x64.tar.gz` 依赖系统 **glibc ≥ 2.39**（约 Ubuntu 24.04 / Debian 13 / Fedora 40 及以上）。老发行版（Ubuntu 22.04、Debian 12、Mint 21、RHEL 9 等）请改用 **Python 版** 或 **Docker**。
+
 ## 🧪 测试
 
 ```bash

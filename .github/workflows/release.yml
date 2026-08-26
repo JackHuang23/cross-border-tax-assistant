@@ -25,19 +25,13 @@ jobs:
           - os: macos-latest
             name: macos-arm64
             archive: cross-border-tax-assistant-macos-arm64.tar.gz
-          - os: macos-13
-            name: macos-x64
-            archive: cross-border-tax-assistant-macos-x64.tar.gz
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-
       - name: Install dependencies
         run: pip install pyinstaller -r requirements.txt
-
       - name: Build with PyInstaller
         shell: bash
         run: |
@@ -48,15 +42,12 @@ jobs:
             --add-data "static${SEP}static" \
             --add-data "docs${SEP}docs" \
             app.py
-
       - name: Archive (Linux / macOS)
         if: runner.os != 'Windows'
         run: cd dist && tar -czf "${{ matrix.archive }}" cross-border-tax-assistant/
-
       - name: Archive (Windows)
         if: runner.os == 'Windows'
         run: cd dist && Compress-Archive -Path cross-border-tax-assistant -DestinationPath "${{ matrix.archive }}"
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -64,16 +55,49 @@ jobs:
           path: dist/${{ matrix.archive }}
           if-no-files-found: error
 
+  python-source:
+    name: Package Python source (only needs Python)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Package
+        run: |
+          set -e
+          DST=cross-border-tax-assistant-python
+          rm -rf "$DST" cross-border-tax-assistant-python.zip
+          mkdir -p "$DST"
+          cp -r app.py tax_engine static templates docs requirements.txt LICENSE LICENSE.EXCEPTION start.py run.sh run.bat uninstall.sh uninstall.bat "$DST"/
+          cat > "$DST/README.txt" <<'EOF'
+跨境个人税务助理 —— Python 版（只需安装 Python 3.9+）
+
+运行：
+  Windows     双击 run.bat   （或 python start.py）
+  Linux/macOS ./run.sh       （或 python3 start.py）
+首次运行自动联网安装依赖，然后打开 http://localhost:5000
+
+卸载（绿色便携式，不写注册表/不留服务）：
+  Windows     双击 uninstall.bat，再删除整个文件夹
+  Linux/macOS ./uninstall.sh，再删除整个文件夹
+
+许可：AGPL-3.0 + FLOSS 兼容性例外（见 LICENSE / LICENSE.EXCEPTION）。
+免责声明：仅供教学与参考，不构成税务意见。
+EOF
+          zip -r cross-border-tax-assistant-python.zip "$DST"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: python-source
+          path: cross-border-tax-assistant-python.zip
+          if-no-files-found: error
+
   release:
     name: Publish GitHub Release
-    needs: build
+    needs: [build, python-source]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
         with:
           path: release-assets
           merge-multiple: true
-
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
